@@ -11,9 +11,9 @@ typedef unsigned char *byte_pointer;                      //unsigned char *ensur
 //typedef int *byte_pointer;
 
 void show_bytes(byte_pointer start,size_t len){
-	size_t i;
+	size_t i;					//size_t is defined as unsigned int in C
 	for(i = 0;i<len;i++)
-        printf("%p\t0x%.2x\n",&start[i],start[i]);      //%p print the pointer %.2x if less than 2 bits add 0 else print all(even more than 2 bits)
+        printf("%p\t0x%.2x\n",&start[i],start[i]);      //%p print the pointer. %.2x :if less than 2 bits add 0 else print all(even more than 2 bits)
 	printf("\n");                                          //explain why change the typedef of byte_pointer,the outcome varies some showing 8 bits
   }                                                      
 
@@ -51,7 +51,7 @@ void simple_show_a(){
 /* $begin simple-show-a */
 	int val= 0x87654321;
 	byte_pointer valp=(byte_pointer)&val;
-	show_bytes(valp,1); /* A. */                      //verify the small endian of most pcs
+	show_bytes(valp,1); /* A. */                      //test type of endian
 	show_bytes(valp,2); /* B. */
 	show_bytes(valp,3); /* C. */
 /* $end simple-show-a */
@@ -71,8 +71,8 @@ void float_eg(){
 	int x = 3490593;
 	float f=(float) x;
 	printf("For x =%d\n",x);
-	show_int(x);
-	show_float(f);
+	show_int(x);			//x in hexa=0x354321
+	show_float(f);		
 
 	x = 3410593;
 	f=(float) x;
@@ -98,8 +98,8 @@ void string_leg(){
 void show_twocomp()
 {
 /* $begin show-twocomp */
-	short x=12345;
-	short mx=-x;
+	short x=12345;     					//12345=0x3039(little endian)
+	short mx=-x;	  					//-12345=0xcfc7(little endian)
 
 	show_bytes((byte_pointer)&x,sizeof(short));
 	show_bytes((byte_pointer)&mx,sizeof(short));
