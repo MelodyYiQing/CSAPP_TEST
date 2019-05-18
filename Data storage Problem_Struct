@@ -1,3 +1,9 @@
+/*Segment fault of array 
+Because the compiler can not detect the problem of the stack overflow,so when we enter the arguments,we should be really careful.
+In this case 1073741824 is a really big number,and we only prepare 2 int to accommodate it.
+So if the argument goes beyond 2, the number will wash out the double 3.14.
+And when the argument goes bigger,it will wash out our return address then the program will commit alarm.
+And some time when we enter 1 there's nothing wrong that is because the compiler always make the space a little larger then our declaration for prepration in case.*/
 #include <stdio.h>
 #include <stdlib.h>
 
