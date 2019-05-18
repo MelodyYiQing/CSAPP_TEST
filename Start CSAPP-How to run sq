@@ -15,3 +15,13 @@ int main(int argc, char *argv[]) {          //argc:how many char you enter in .c
     }
     return 0;
 } 
+/*
+This is the first program i ran on Linux 
+First,you need to enter in'cd/ mnt'(mount挂载）
+Then,enter in hgfs.
+//cd means enter into,and ls can help us search what's in the foldler
+Here we can see the .c files that we can run.
+Choose one the gcc -o 'give the file a name' 'file.c'
+Some times -O1 -O2 can optimize our program at different degree.
+Then ./'file name'.out 'the argument that you may want to enter in'
+*/
