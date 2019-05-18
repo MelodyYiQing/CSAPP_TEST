@@ -1,3 +1,4 @@
+//Though when two float conduct addtion there will be no overflow but the accuracy maybe lost when matching the exponent
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
