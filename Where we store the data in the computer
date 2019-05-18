@@ -1,3 +1,7 @@
+/*Different data in different area 
+function of malloc and free is stored in the heap.
+arguments and local variable is in the stack.*/
+global and static is in the data area where is far below the stack and heap.
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
