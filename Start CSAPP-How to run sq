@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int sq(int x) {
+    return x*x;
+}
+
+int main(int argc, char *argv[]) {          //argc:how many char you enter in .char* argv[]:The string you enter in.
+    int i;
+    for (i = 1; i < argc; i++) 
+    {
+	int x = atoi(argv[i]);                    //int atoi(const char *str):convert string into int.
+	int sx = sq(x);
+	printf("sq(%d) = %d\n", x, sx);
+    }
+    return 0;
+} 
