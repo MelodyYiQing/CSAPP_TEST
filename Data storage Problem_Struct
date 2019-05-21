@@ -4,7 +4,7 @@ In this case 1073741824 is a really big number,and we only prepare 2 int to acco
 So if the argument goes beyond 2, the number will wash out the double 3.14.
 And when the argument goes bigger,it will wash out our return address then the program will commit alarm.
 And some time when we enter 1 there's nothing wrong that is because the compiler always make the space a little larger then our declaration for prepration in case.*/
-```cpp
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     printf("fun(%d) --> %.10f\n", i, d);
     return 0;
 }
-```
+
 /*
 gec@ubuntu:/mnt/hgfs/share/csapp_code$ ./a.out 0
 fun(0) --> 3.1400000000
