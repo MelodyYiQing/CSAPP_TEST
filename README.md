@@ -3,7 +3,7 @@ CS:APP Learning Blog & Semester sumary
 This semester I had learnt some part of the CS:APP.So cosidering my performance score(this blog is part of the score)and also for following review,here I write some understanding about all the programs we ran this semester and the two projects of the CMU(datalab & bomblab).It's my first time to write a learning blog with my poor english,so just read it for fun.
 <br>Some of the programs are cited from our class ppts,but I carefully write the annotation.Also I do the 2 tests (datalab&bomblab)from CMU.
 <br>`Since I'm still confused about how to use the github to write a goodlooking blog.All that I want to convey is added to the annotation above or below the code blocks.`
-<br>#Datalab
+#Datalab
 * bitXor - x^y using only ~ and &
   <br>Example: bitXor(4, 5) = 1
   <br>Legal ops: ~ &
@@ -71,5 +71,94 @@ int allOddBits(int x)
 ```cpp
 int negate(int x) {
   return (~x)+1;
+}
+```
+* isAsciiDigit - return 1 if 0x30 <= x <= 0x39 (ASCII codes for characters '0' to '9')
+<br>Example: isAsciiDigit(0x35) = 1.
+ <br> isAsciiDigit(0x3a) = 0.
+ <br>isAsciiDigit(0x05) = 0.
+  <br>   Legal ops: ! ~ & ^ | + << >>
+ <br>Max ops: 15
+ <br>Rating: 3
+<br>`Analyze:`<br>`When x is between 30 to 39,x-0x39 <=0 and x-0x30>=0,because when we define a number is positive or not ,we look at the highest bit ,whether it is 0 or not .So it's better to convert x-0x39<=0 to x-0x3A<0.`
+```cpp
+int isAsciiDigit(int x) 
+{
+  return (!((x+~48+1)>>31)&!!((x+~58+1)>>31);
+}
+```
+* conditional - same as x ? y : z
+<br> Example: conditional(2,4,5) = 4
+<br>    Legal ops: ! ~ & ^ | + << >>
+<br>    Max ops: 16
+<br>   Rating: 3
+<br>`Analyze:`
+<br>` that is (a&y)|(b&z) and make a =0xffffffff(0-1),b=0(1-1)  (x!=0) a=0,b=0xffffffff (x=0)`<br>`so a=(!x+~1+1)  b=(~!x+1)`
+```cpp
+int conditional(int x, int y, int z)
+{
+  return ((!x+~1+1)&y)|((~!x+1)&z);
+}
+```
+* isLessOrEqual - if x <= y  then return 1, else return 0
+<br>  Example: isLessOrEqual(4,5) = 1.
+<br>  Legal ops: ! ~ & ^ | + << >>
+<br>  Max ops: 24
+<br> Rating: 3
+<br>`Analyze:`
+<br>`2 conditions: x and y are both positive or negative.or not.`<br>`case 1: compare x-y<=0 => x+~y<0    case 2:see whether x is positive or not `
+```cpp
+int isLessOrEqual(int x, int y) {
+    int sign_x=x>>31;
+    int sign_y=y>>31;
+    int equal =!(sign_x^sign_y)&((~y+x)>>31);
+    int notequal=sign_x^!sign_y;
+    return equal|notequal;
+```
+* logicalNeg - implement the ! operator, using all of
+             the legal operators except !
+<br> Examples: logicalNeg(3) = 0, logicalNeg(0) = 1
+ <br>   Legal ops: ~ & ^ | + << >>
+ <br>   Max ops: 12
+ <br>   Rating: 4
+<br>`Analyze:`
+<br>`3 conditions: when x!=0 or Tmin,sign of x & sign of ~x =0 ; x=0 ;x= Tmin; `<br>`and Tmin +1 =0 and ~0=Tmin so`
+```cpp
+int logicalNeg(int x) {
+  return ((~(~x+1)&~x)>>31)&1;
+}
+```
+* howManyBits - return the minimum number of bits required to represent x in
+             two's complement
+ <br>  Examples: howManyBits(12) = 5
+ <br>            howManyBits(298) = 10
+<br>            howManyBits(-5) = 4
+ <br>           howManyBits(0)  = 1
+ <br>            howManyBits(-1) = 1
+<br>            howManyBits(0x80000000) = 32
+ <br>  Legal ops: ! ~ & ^ | + << >>
+ <br>  Max ops: 90
+<br>  Rating: 4
+<br> `Analyze:`
+<br>`Like Binary search , and add 2 to the sum(one for sign and another is at least you should have one `
+```cpp
+int howManyBits(int x) {
+    int shift1,shift2,shift4,shift8,shift16;
+    int sum;
+    int t =((!x)<<31)>>31; // whether = 0?
+    int t2=((!~x)<<31)>>31;// whether = Tmin?
+    int op=x^(x>>31);//make negative positive
+    shift16=(!!(op>>16))<<4;//2^4=16
+    op=op>>shift16;
+    shift8=(!!(op>>8))<<3;
+    op=op>>shift8;
+    shift4=(!!(op>>4))<<2;
+    op=op>>shift4;
+    shift4=(!!(op>>2))<<1;
+    op=op>>shift2;
+    shift1=!!(op>>1);
+    op=op>>shift1;
+    sum=2+shift1+shift2+shift4+shift8+shift16;
+  return (t2&1)|((~t2)&((t&1)|(~t)&sum));
 }
 ```
