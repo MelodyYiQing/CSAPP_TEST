@@ -228,3 +228,28 @@ int floatFloat2Int(unsigned uf) {
     }
 }
 ```
+* floatPower2 - Return bit-level equivalent of the expression 2.0^x  (2.0 raised to the power x) for any 32-bit integer x.
+<br>The unsigned value that is returned should have the identical bit representation as the single-precision floating-point number 2.0^x.
+<br>If the result is too small to be represented as a denorm, return   0. If too large, return +INF.
+<br>  Legal ops: Any integer/unsigned operations incl. ||, &&. Also if, while
+<br>  Max ops: 30
+<br>   Rating: 4
+<br>`Analyze:`
+<br>`Because the largest float is (1.111~11)<<(254-127) so x should <=127,else print out 0x7f800000;the smallest shoule be (0.00000~~01)>>(1-127),so x should >=-149,else print 0;`
+<br>`If x <=-127,then just move the fraction rigntward.Else move the exponent(exp=x+127) then leftward 23 bits(out of the fraction part)`
+```cpp
+unsigned floatPower2(int x) {
+    int frac = x+149;
+    if(x>127) return 0x7f800000;
+    if(x<-149) return 0;
+    if(x<=-127)
+    {
+        return 1u<<frac;
+    }
+    else
+    {
+        unsigned exp=x+127;
+        return exp<<23;
+    }
+}
+```
