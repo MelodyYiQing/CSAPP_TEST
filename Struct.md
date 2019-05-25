@@ -31,5 +31,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
-
+Outcome
+----
+![struct.c](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/struct.c.png)
 
