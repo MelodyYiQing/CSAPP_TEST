@@ -1,7 +1,7 @@
 Show_Bytes
 ----
 Problems
-~~~
+---
 <br>1.Why use unsigned char?
 <br>unsigned char *ensures that even if the address overflows it wouldn't extend its bits.while char* int* considering they have the sign bit if overflow they will extend thus lead to wrong answer
 <br>2.This programme can help us to see whether the computer is little endian or not.
