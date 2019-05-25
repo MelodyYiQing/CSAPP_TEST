@@ -26,3 +26,4 @@ Choose one the gcc -o 'give the file a name' 'file.c'<br>
 Some times -O1 -O2 can optimize our program at different degree.<br>
 Then ./'file name'.out 'the argument that you may want to enter in'<br>
 --
+![sq](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/sq.png)
