@@ -165,3 +165,99 @@ int howManyBits(int x) {
   return (t2&1)|((~t2)&((t&1)|(~t)&sum));
 }
 ```
+* floatScale2 - Return bit-level equivalent of expression 2*f for floating point argument f.
+<br>Both the argument and result are passed as unsigned int's, but they are to be interpreted as the bit-level representation of
+ single-precision floating point values.
+<br>   When argument is NaN, return argument
+<br>   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+<br>  Max ops: 30
+<br>  Rating: 4
+<br>`Analyze:`
+<br>`First dispose the float of sign,exponent and fraction.Then process it according to whether it's normalized number or not.As to unnormalized.If the uf is NAN,(exp is 0xff),just print it.Else if the uf is unnormalized but not NAN(exp is 0x00),then just make it <<1;else for normalized number,exp+1 and fraction<<1;`
+`Attention:when the normalized number's exp is 0x11111110 then print NAN
+```cpp
+unsigned floatScale2(unsigned uf) {
+    unsigned sign =(uf&0x80000000);
+    unsigned exp=(uf&0x7f800000);
+    unsigned frac=(uf<<9)>>9;
+    if(!exp)
+    {
+        frac=frac<<1;
+        return sign|frac;
+    }
+    else if(!(exp^0xff))
+    {
+        return uf;
+    }
+    else if(!(exp^0xfe))
+    {
+        return sign|0x7f800000;
+    }
+    else
+        {
+            return (((exp+1)<<23)|sign)|frac;
+        }
+}
+```
+* floatFloat2Int - Return bit-level equivalent of expression (int) f for floating point argument f.
+<br>   Argument is passed as unsigned int, but
+<br>   it is to be interpreted as the bit-level representation of a
+  single-precision floating point value.
+<br>   Anything out of range (including NaN and infinity) should return
+   0x80000000u.
+<br>   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ <br>   Max ops: 30
+ <br>  Rating: 4
+ <br>`Analyze:`
+ <br>`if the float < 1(exp<=127),just return 0;else process;If NAN (exp=0xff),return 0x800000000u;else judge the exp whether it is > 23 or not;`
+ <br>`Attention:Normalized number NEED TO add 1.And also be careful that int only have 32 bits(exp most 127+31=158);`
+ ```cpp
+ int floatFloat2Int(unsigned uf) {
+    unsigned sign =(uf&0x80000000);
+    unsigned exp =(uf & 0x7f800000)>>23;
+    unsigned frac = (1<<23)|((uf<<9)>>9);
+    int E = exp-127;
+    int val;
+    if (E<=0) return 0;
+    if(exp>=158) return 0x80000000;
+    if(E<=23)
+    {
+        val=(frac>>(23-E));
+        return (!sign?val:-val);
+    }
+    else
+    {
+        val=(frac<<(23-E));
+        return (!sign?val:-val);
+    }
+}
+```
+* floatPower2 - Return bit-level equivalent of the expression 2.0^x  (2.0 raised to the power x) for any 32-bit integer x.
+<br>  The unsigned value that is returned should have the identical bit
+   representation as the single-precision floating-point number 2.0^x.
+<br>   If the result is too small to be represented as a denorm, return
+  0. If too large, return +INF.
+<br>   Legal ops: Any integer/unsigned operations incl. ||, &&. Also if, while
+<br>   Max ops: 30
+<br>  Rating: 4
+<br>`Analyze:`
+`exp largest:0x11111110 so (2^x)<((1.111~11)<<(254-127) ,so x<=127;exp smallest :0x00000000,frac:0x00000~0001,so x>=(0-127)+(-22)=-149.so when x<-149,return 0.if x>127,return +INF;`
+`Process:exp=0,val<1,only move the fraction part.x<=-127&&x>=-149, return 1<<(x+149);else exp>0, move the exp part,exp=x+127,exp<<23(jump the fraction)`
+```cpp
+unsigned floatPower2(int x) {
+    int frac = x+149;
+    if(x>127) return 0x7f800000;
+    if(x<-149) return 0;
+    if(x<=-127)
+    {
+        return 1u<<frac;
+    }
+    else
+    {
+        unsigned exp=x+127;
+        return exp<<23;
+    }
+}
+```
+
+ 
