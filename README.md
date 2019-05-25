@@ -12,7 +12,7 @@ Datalab
   <br>Legal ops: ~ &
   <br>Max ops: 14
   <br>Rating: 1
-<br>`Analyze:`<br>`x^y=(x&~y)|(~x&y)<br>(x&~y)：when x=1,y=0,remain 1   (y&~x):when x=0,y=1,remain 1;`
+<br>`Analyze:`<br>`x^y=(x&~y)|(~x&y)`<br>`(x&~y)：when x=1,y=0,remain 1   (y&~x):when x=0,y=1,remain 1;`
 <br>`| :when x and y both are zero get zero   &:when x and y both are one get one; so there's some similarity;`
 <br>`we can convert  (x|y) to ((~x)&(~y))`
 ```cpp
