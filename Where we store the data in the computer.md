@@ -1,7 +1,9 @@
-/*Different data in different area 
+Different data in different area 
+----
 function of malloc and free is stored in the heap.
-arguments and local variable is in the stack.*/
-global and static is in the data area where is far below the stack and heap.
+<br>arguments and local variable is in the stack.
+<br>global and static is in the data area where is far below the stack and heap.
+```cpp
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -41,20 +43,7 @@ int main ()
     show_pointer((void *) malloc, "malloc");
     return 0;
 }
-
-/*
-gec@ubuntu:/mnt/hgfs/share/csapp_code$ gcc locate.c
-gec@ubuntu:/mnt/hgfs/share/csapp_code$ ./a.out
-big array	0x4804a060	1208262752
-huge array	0x804a060	134520928
-local	0xbfcc9fdc	3217858524
-global	0x804a044	134520900
-p1	0xa7545008	2807320584
-p2	0x49a67008	1235644424
-p3	0x49a67110	1235644688
-p4	0x49a77118	1235710232
-useless	0x80484b6	134513846
-exit	0x8048370	134513520
-malloc	0x8048350	134513488
-
-*/
+```
+Outcome
+--
+![locate](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/locate.png)
