@@ -1,4 +1,6 @@
-//Though when two float conduct addtion there will be no overflow but the accuracy maybe lost when matching the exponent
+Though when two float conduct addtion there will be no overflow but the accuracy maybe lost when matching the exponent
+---
+```cpp
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,14 +27,7 @@ int main(int argc, char *argv[]) {
   }
     return 0;
 }
-/*
-@ubuntu:/mnt/hgfs/share/csapp_code$ ./a.out 1e20 -1e20 3.14
-1e+20 + -1e+20 = 0
-1e+20 + -1e+20 + 3.14 = 3.14
-@ubuntu:/mnt/hgfs/share/csapp_code$ ./a.out -1e20 3.14  
--1e+20 + 3.14 = -1e+20
-@ubuntu:/mnt/hgfs/share/csapp_code$ ./a.out -1e20 3.14  1e20
--1e+20 + 3.14 = -1e+20
--1e+20 + 3.14 + 1e+20 = 0
-
-*/
+```
+OUTCOME
+---
+![struct](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/fsum.png)
