@@ -140,3 +140,9 @@ int main (int argc,char* argv[])
 	return 0;
 } //no wrong
 ```
+Outcome
+---
+![show1](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/show1.png)
+![show1](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/show3%20(2).png)
+![show1](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/show3%20(1).png)
+![show1](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/show4.png)
