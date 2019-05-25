@@ -165,3 +165,66 @@ int howManyBits(int x) {
   return (t2&1)|((~t2)&((t&1)|(~t)&sum));
 }
 ```
+* floatScale2 - Return bit-level equivalent of expression 2*f for floating point argument f.
+<br>   Both the argument and result are passed as unsigned int's, but they are to be interpreted as the bit-level representation of  single-precision floating point values.
+ <br> When argument is NaN, return argument
+<br>Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+<br>   Max ops: 30
+<br> Rating: 4
+<br>`Analyze:`
+<br>`First we need to dispose the float into sign ,exponent,fraction.Then judge it,if exp=0xff,then just print 0x7f800000,else if exp =0,just move 1 bit of the float leftwards.For normalized number,just exp+1.`
+<br>`Attention:if the exp=0x11111110,then need to print NAN`
+ ```cpp
+unsigned floatScale2(unsigned uf) {
+    unsigned sign =(uf&0x80000000);
+    unsigned exp=(uf&0x7f800000);
+    unsigned frac=(uf<<9)>>9;
+    if(!exp)
+    {
+        frac=frac<<1;
+        return sign|frac;
+    }
+    else if(!(exp^0xff))
+    {
+        return uf;
+    }
+    else if(!(exp^0xfe))
+    {
+        return sign|0x7f800000;
+    }
+    else
+        {
+            return (((exp+1)<<23)|sign)|frac;
+        }
+}
+```
+* floatFloat2Int - Return bit-level equivalent of expression (int) f for floating point argument f.
+<br> Argument is passed as unsigned int, but it is to be interpreted as the bit-level representation of a single-precision floating point value.
+<br>   Anything out of range (including NaN and infinity) should return  0x80000000u.
+<br>  Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+<br> Max ops: 30
+<br>  Rating: 4
+<br>`Analyze:`
+<br>`if exp<=127,just return 0 (the value is <1),if(exp>158(127+31(because normalized number has 1 already),print out NAN;else do normal process;`
+<br>`If exp-127<=23,then the fraction may not maintain,some may lost.Else,all bits of fraction will be remained.So just enlarge the fraction first them judge the exp to move leftwards or rigntwards.`
+```cpp
+int floatFloat2Int(unsigned uf) {
+    unsigned sign =(uf&0x80000000);
+    unsigned exp =(uf & 0x7f800000)>>23;
+    unsigned frac = (1<<23)|((uf<<9)>>9);
+    int E = exp-127;
+    int val;
+    if (E<=0) return 0;
+    if(exp>=158) return 0x80000000;
+    if(E<=23)
+    {
+        val=(frac>>(23-E));
+        return (!sign?val:-val);
+    }
+    else
+    {
+        val=(frac<<(23-E));
+        return (!sign?val:-val);
+    }
+}
+```
