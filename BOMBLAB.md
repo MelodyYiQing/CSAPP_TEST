@@ -40,4 +40,19 @@ we can see in 0x402400,store the second argument which are supposed to the answe
 <br>Then we can use `quit` to quit the gdb and enter it again to test the answer.This time we set one more breakpoint of phase_2 in advance to do the next part.And because when we enter continue,it doesn't stop at the explode_bomb,so the answer is right.Then we casually enter an argument to run the next code.
 ![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb4.png)
 ![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb5.png)
-
+* Phase_2
+<br>First disassemble the code again.
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb6.png)
+<br>This one is bit harder and from several `cmp` instructs it is clear that this answer is composed of several numbers.
+<br>So after `callq <read_six_numbers>`,from`cmpl $0x1,(%rsp)`we can deduce that the first number is `1`;
+<br>then we jump to `0x400f30`(from former deduction we now know (%rsp)=1),the instruct is `lea 0x4(%rsp),%rbx`so in rbx we get the second argument;
+<br>and then from`lea 0x18(%rsp),%rbp`,rbp no meaning because it's the seventh argument ;
+<br>then jump to `0x400f17` there,the eax get 1(eax=first argument);
+<br>then the `add %eax %eax` double the eax,so the eax is 2 now;
+<br>then do the compare,so the second argument is 2;<br>jump to `0x400f25`,third argument in rbx;and here we know actually it is a circulation,and rbp is like a guard.
+<br>`cmp`beacuse rbp is the seventh argument they are not equal, so jump to`0x400f17`eax=2,then double again get 4 so it's the third argument =4;
+<br>So from the former code we can conclude it is a progressive increase.and the answer is 1 2 4 8 16 32.
+<br>Then we quit and test it again.And meanwhile make preparation for the third part.
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb7.png)
+<br>As expected it is right!
+* Phase_3
