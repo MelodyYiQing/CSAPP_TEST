@@ -100,22 +100,40 @@ Dump of assembler code for function phase_3:
    0x0000000000400fcd <+138>:	retq   
 End of assembler dump.
 ```
-we also get the func4 disassenmbled
+<br>This part we see`mov    $0x4025cf,%esi`,so we first use x/s to see what's in the 0x4025cf
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb8.png)
+<br>And then we find this part has a restriction of the format of our input that is we need to input 2 numbers.So it's advisable that guess rsp+12 is the second argument and rsp+8 is the first argument.
+<br>From `0x400f51--0x400f63`ensures that we must input 2 numbers.Jump to`0x400f6a`
+<br>the second argument must <= 7,eax=first argument,and from`0x400f71`we can see it function as the case number in switch.
+<br>And when we us x/s to see `*0x402470` we can see it turns to <phase3_+57>
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb9.png)
+<br>so when the first argument equals 0,`jmpq *0x402470(,%rax,8)`just move to the next instruct `mov $0xcf,%eax`so cf=207=second argument.And actually it has several matches which you can choose,for the first argument ranges from 0 to 7;
+<br>So lets try the answer.<br>
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb10.png)
+<br>As expected it is true!
+* Phase_4
+<br>First disassemble it.
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb11.png)
+<br>And we can see the format of input is quite similar with phase_3
+<br>
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb12.png)
+<br>`	cmpl   $0xe,0x8(%rsp)`along with the next instruct`jbe    0x40103a <phase_4+46>`ensures the first argument <= 14;
+<br>Then the following three instructs make edx=14,esi=0,edi=first argument;
+<br>It's time to enter func4.So disassemble func4
 ```cpp
-
 0000000000400fce <func4>:
   400fce:	48 83 ec 08          	sub    $0x8,%rsp
-  400fd2:	89 d0                	mov    %edx,%eax
-  400fd4:	29 f0                	sub    %esi,%eax
-  400fd6:	89 c1                	mov    %eax,%ecx
-  400fd8:	c1 e9 1f             	shr    $0x1f,%ecx
-  400fdb:	01 c8                	add    %ecx,%eax
-  400fdd:	d1 f8                	sar    %eax
-  400fdf:	8d 0c 30             	lea    (%rax,%rsi,1),%ecx
-  400fe2:	39 f9                	cmp    %edi,%ecx
+  400fd2:	89 d0                	mov    %edx,%eax	//eax=14
+  400fd4:	29 f0                	sub    %esi,%eax	//eax=14
+  400fd6:	89 c1                	mov    %eax,%ecx	//ecx=14
+  400fd8:	c1 e9 1f             	shr    $0x1f,%ecx	//ecx=0
+  400fdb:	01 c8                	add    %ecx,%eax	//eax=14
+  400fdd:	d1 f8                	sar    %eax		//eax=7
+  400fdf:	8d 0c 30             	lea    (%rax,%rsi,1),%ecx   //ecx=7
+  400fe2:	39 f9                	cmp    %edi,%ecx  //7<=first argument return 0
   400fe4:	7e 0c                	jle    400ff2 <func4+0x24>
-  400fe6:	8d 51 ff             	lea    -0x1(%rcx),%edx
-  400fe9:	e8 e0 ff ff ff       	callq  400fce <func4>
+  400fe6:	8d 51 ff             	lea    -0x1(%rcx),%edx  //first argument < 7 ,edx=6
+  400fe9:	e8 e0 ff ff ff       	callq  400fce <func4>    //begin circulation
   400fee:	01 c0                	add    %eax,%eax
   400ff0:	eb 15                	jmp    401007 <func4+0x39>
   400ff2:	b8 00 00 00 00       	mov    $0x0,%eax
@@ -127,14 +145,4 @@ we also get the func4 disassenmbled
   401007:	48 83 c4 08          	add    $0x8,%rsp
   40100b:	c3                   	retq   
 ```
-<br>This part we see`mov    $0x4025cf,%esi`,so we first use x/s to see what's in the 0x4025cf
-![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb8.png)
-<br>And then we find this part has a restriction of the format of our input that is we need to input 2 numbers.So it's advisable that guess rsp+12 is the second argument and rsp+8 is the first argument.
-<br>From `0x400f51--0x400f63`ensures that we must input 2 numbers.Jump to`0x400f6a`
-<br>the second argument must <= 7,eax=first argument,and from`0x400f71`we can see it function as the case number in switch.
-<br>And when we us x/s to see `*0x402470` we can see it turns to <phase3_+57>
-![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb9.png)
-<br>so when the first argument equals 0,`jmpq *0x402470(,%rax,8)`just move to the next instruct `mov $0xcf,%eax`so cf=207=second argument.And actually it has several matches which you can choose,for the first argument ranges from 0 to 7;
-<br>So lets try the answer.
-![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb10.png)
-<br>As expected it is true!
+<br>edx=14,esi=0,edi=first argument;
