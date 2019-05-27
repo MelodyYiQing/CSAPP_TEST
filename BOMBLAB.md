@@ -115,7 +115,6 @@ End of assembler dump.
 <br>First disassemble it.
 ![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb11.png)
 <br>And we can see the format of input is quite similar with phase_3
-<br>
 ![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb12.png)
 <br>`	cmpl   $0xe,0x8(%rsp)`along with the next instruct`jbe    0x40103a <phase_4+46>`ensures the first argument <= 14;
 <br>Then the following three instructs make edx=14,esi=0,edi=first argument;
