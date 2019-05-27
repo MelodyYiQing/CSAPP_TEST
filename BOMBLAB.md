@@ -32,4 +32,12 @@ Then we use `objdump-d bomb > bomb.txt`to see the disassembled code.
 ```
 we can see in 0x402400,store the second argument which are supposed to the answer.
 <br>we first set the breakpoint at phase_1 and explode_bomb then run the program.When asked enter a string ,enter sth casually(I just input my english name.hh)
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/Bomb1.png)
+<br>Then we stop at the breakpoint of phase_1,the use disas to disassemble it and it can be seen same with our objdump file.Use the print and x can see what we put in.
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb2.png)
+<br>Then we use x/s to see what's in the esi,which should be the answer of the question.
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb3.png)
+<br>Then we can use `quit` to quit the gdb and enter it again to test the answer.This time we set one more breakpoint of phase_2 in advance to do the next part.And because when we enter continue,it doesn't stop at the explode_bomb,so the answer is right.Then we casually enter an argument to run the next code.
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb4.png)
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb5.png)
 
