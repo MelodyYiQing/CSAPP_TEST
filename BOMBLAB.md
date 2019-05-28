@@ -118,30 +118,83 @@ End of assembler dump.
 ![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb12.png)
 <br>`	cmpl   $0xe,0x8(%rsp)`along with the next instruct`jbe    0x40103a <phase_4+46>`ensures the first argument <= 14;
 <br>Then the following three instructs make edx=14,esi=0,edi=first argument;
-<br>It's time to enter func4.So disassemble func4
+<br>It's time to enter func4.So disassemble func4.Wait!Before enter it,the following instructs ensures that func4 must return 0 to avoid explosion.
 ```cpp
 0000000000400fce <func4>:
   400fce:	48 83 ec 08          	sub    $0x8,%rsp
-  400fd2:	89 d0                	mov    %edx,%eax	//eax=14
-  400fd4:	29 f0                	sub    %esi,%eax	//eax=14
-  400fd6:	89 c1                	mov    %eax,%ecx	//ecx=14
-  400fd8:	c1 e9 1f             	shr    $0x1f,%ecx	//ecx=0
-  400fdb:	01 c8                	add    %ecx,%eax	//eax=14
-  400fdd:	d1 f8                	sar    %eax		//eax=7
-  400fdf:	8d 0c 30             	lea    (%rax,%rsi,1),%ecx   //ecx=7
-  400fe2:	39 f9                	cmp    %edi,%ecx  //7<=first argument return 0
-  400fe4:	7e 0c                	jle    400ff2 <func4+0x24>
-  400fe6:	8d 51 ff             	lea    -0x1(%rcx),%edx  //first argument < 7 ,edx=6
-  400fe9:	e8 e0 ff ff ff       	callq  400fce <func4>    //begin circulation
-  400fee:	01 c0                	add    %eax,%eax
+  400fd2:	89 d0                	mov    %edx,%eax	//eax=x	
+  400fd4:	29 f0                	sub    %esi,%eax	//eax=x-y
+  400fd6:	89 c1                	mov    %eax,%ecx	//ecx=x-y
+  400fd8:	c1 e9 1f             	shr    $0x1f,%ecx	//ecx>>16  0
+  400fdb:	01 c8                	add    %ecx,%eax	//eax=x-y
+  400fdd:	d1 f8                	sar    %eax		//eax=(x-y)/2
+  400fdf:	8d 0c 30             	lea    (%rax,%rsi,1),%ecx   //ecx=(x+y)/2
+  400fe2:	39 f9                	cmp    %edi,%ecx      
+  400fe4:	7e 0c                	jle    400ff2 <func4+0x24>	//ecx<=z
+  400fe6:	8d 51 ff             	lea    -0x1(%rcx),%edx 		//edx=(x+y)/2-1
+  400fe9:	e8 e0 ff ff ff       	callq  400fce <func4>    	//recursion start
+  400fee:	01 c0                	add    %eax,%eax		//return 2*func4((x+y)/2-1,0,z)
   400ff0:	eb 15                	jmp    401007 <func4+0x39>
-  400ff2:	b8 00 00 00 00       	mov    $0x0,%eax
-  400ff7:	39 f9                	cmp    %edi,%ecx
-  400ff9:	7d 0c                	jge    401007 <func4+0x39>
-  400ffb:	8d 71 01             	lea    0x1(%rcx),%esi
-  400ffe:	e8 cb ff ff ff       	callq  400fce <func4>
+  400ff2:	b8 00 00 00 00       	mov    $0x0,%eax		//eax= 0
+  400ff7:	39 f9                	cmp    %edi,%ecx		
+  400ff9:	7d 0c                	jge    401007 <func4+0x39>	//ecx>=z
+  400ffb:	8d 71 01             	lea    0x1(%rcx),%esi		//ecx<=z,esi=(x+y)/2+1
+  400ffe:	e8 cb ff ff ff       	callq  400fce <func4>		//return 2*func4((x+y)/2+1,0,z)
   401003:	8d 44 00 01          	lea    0x1(%rax,%rax,1),%eax
-  401007:	48 83 c4 08          	add    $0x8,%rsp
+  401007:	48 83 c4 08          	add    $0x8,%rsp		
   40100b:	c3                   	retq   
 ```
-<br>edx=14,esi=0,edi=first argument;
+<br>edx=14,esi=0,edi=first argument(<14);And we see `400fe9:	e8 e0 ff ff ff       	callq  400fce <func4>  ` we know there may be a recursion.
+<br>when first argument >= ecx && first argument <= ecx return 0(ok), and there must be first argument =z ,so when edx =14,esi=0,ecx=7 .
+<br>And quit from func4,the following compare ensures the second input must be 0;
+<br>Try the answer and as expected it is right.
+
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb13.png)
+
+* Phase 5
+<br>As always disassemble first.
+```cpp
+Breakpoint 2, 0x0000000000401062 in phase_5 ()
+(gdb) disas
+Dump of assembler code for function phase_5:
+=> 0x0000000000401062 <+0>:	push   %rbx
+   0x0000000000401063 <+1>:	sub    $0x20,%rsp
+   0x0000000000401067 <+5>:	mov    %rdi,%rbx
+   0x000000000040106a <+8>:	mov    %fs:0x28,%rax
+   0x0000000000401073 <+17>:	mov    %rax,0x18(%rsp)
+   0x0000000000401078 <+22>:	xor    %eax,%eax
+   0x000000000040107a <+24>:	callq  0x40131b <string_length>
+   0x000000000040107f <+29>:	cmp    $0x6,%eax
+   0x0000000000401082 <+32>:	je     0x4010d2 <phase_5+112>
+   0x0000000000401084 <+34>:	callq  0x40143a <explode_bomb>
+   0x0000000000401089 <+39>:	jmp    0x4010d2 <phase_5+112>
+   0x000000000040108b <+41>:	movzbl (%rbx,%rax,1),%ecx
+   0x000000000040108f <+45>:	mov    %cl,(%rsp)
+   0x0000000000401092 <+48>:	mov    (%rsp),%rdx
+   0x0000000000401096 <+52>:	and    $0xf,%edx
+   0x0000000000401099 <+55>:	movzbl 0x4024b0(%rdx),%edx
+   0x00000000004010a0 <+62>:	mov    %dl,0x10(%rsp,%rax,1)
+   0x00000000004010a4 <+66>:	add    $0x1,%rax
+   0x00000000004010a8 <+70>:	cmp    $0x6,%rax
+   0x00000000004010ac <+74>:	jne    0x40108b <phase_5+41>
+   0x00000000004010ae <+76>:	movb   $0x0,0x16(%rsp)
+   0x00000000004010b3 <+81>:	mov    $0x40245e,%esi
+   0x00000000004010b8 <+86>:	lea    0x10(%rsp),%rdi
+   0x00000000004010bd <+91>:	callq  0x401338 <strings_not_equal>
+   0x00000000004010c2 <+96>:	test   %eax,%eax
+   0x00000000004010c4 <+98>:	je     0x4010d9 <phase_5+119>
+---Type <return> to continue, or q <return> to quit---return
+   0x00000000004010c6 <+100>:	callq  0x40143a <explode_bomb>
+   0x00000000004010cb <+105>:	nopl   0x0(%rax,%rax,1)
+   0x00000000004010d0 <+110>:	jmp    0x4010d9 <phase_5+119>
+   0x00000000004010d2 <+112>:	mov    $0x0,%eax
+   0x00000000004010d7 <+117>:	jmp    0x40108b <phase_5+41>
+   0x00000000004010d9 <+119>:	mov    0x18(%rsp),%rax
+   0x00000000004010de <+124>:	xor    %fs:0x28,%rax
+   0x00000000004010e7 <+133>:	je     0x4010ee <phase_5+140>
+   0x00000000004010e9 <+135>:	callq  0x400b30 <__stack_chk_fail@plt>
+   0x00000000004010ee <+140>:	add    $0x20,%rsp
+   0x00000000004010f2 <+144>:	pop    %rbx
+   0x00000000004010f3 <+145>:	retq   
+End of assembler dump.
+```
