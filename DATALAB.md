@@ -1,5 +1,7 @@
 Datalab
-----
+====
+This homework can be download from cmu,and you will get a .tar file.use`tar xvf xxx.tar`in linux can help you open this file.And the README can help you understand the homework.
+-----
 * bitXor - x^y using only ~ and &
   <br>Example: bitXor(4, 5) = 1
   <br>Legal ops: ~ &
