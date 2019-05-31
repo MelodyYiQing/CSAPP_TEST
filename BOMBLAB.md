@@ -202,7 +202,7 @@ End of assembler dump.
 <br>After 2 jump,we arrive at<+41>,previous through `xor` eax=0,so here ecx=rbx. and there we get into a circulation.
 <br>It makes us always get the last four bits of the string element.And search the string in 0x4024b0 accroing to the number of the four bits,than store the letter in 0x10(%rsp,%rax,1).Not until we get 6 letters can we quit the circulation.
 <br> Then move 0 to rsp+24(every string has /0 as the end signal)Look into the 0x40245e we see the processed string should be 'flyers'
-![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb14.png)
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb14.jpg)
 <br>So the last four bits are 1001 1111 1110 0101 0110 1110.Then search the ascii(using man ascii in linux)To look for char whose last four bits are matched(a lot of).
 <br>So I choose IONEFG as the answer.Try and as expected it is right.HHHH
 ![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb15.png)
