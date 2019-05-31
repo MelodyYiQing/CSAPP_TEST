@@ -202,7 +202,7 @@ unsigned floatScale2(unsigned uf) {
 <br> Max ops: 30
 <br>  Rating: 4
 <br>`Analyze:`
-<br>`if exp<=127,just return 0 (the value is <1),if(exp>158(127+31(because normalized number has 1 already),print out NAN;else do normal process;`
+<br>`if exp<127,just return 0 (the value is <1),if(exp>158(127+31(because normalized number has 1 already),print out NAN;else do normal process;`
 <br>`If exp-127<=23,then the fraction may not maintain,some may lost.Else,all bits of fraction will be remained.So just enlarge the fraction first them judge the exp to move leftwards or rigntwards.`
 ```cpp
 int floatFloat2Int(unsigned uf) {
@@ -211,7 +211,7 @@ int floatFloat2Int(unsigned uf) {
     unsigned frac = (1<<23)|((uf<<9)>>9);
     int E = exp-127;
     int val;
-    if (E<=0) return 0;
+    if (E<0) return 0;
     if(exp>=158) return 0x80000000;
     if(E<=23)
     {
@@ -250,3 +250,8 @@ unsigned floatPower2(int x) {
     }
 }
 ```
+Eventually we survived!
+===
+<br>Some friend may just refer to the other learning blocks online without check and here I's suggest we are expected to do it(actually I had many mistakes during check even if I also compared mine to the other learners.)
+<br>Here's the result!
+![Result](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/Survive%20datalab.png)
