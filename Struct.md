@@ -2,10 +2,11 @@ Segment Fault
 -----
 Because the compiler can not detect the problem of the stack overflow,so when we enter the arguments,we should be really careful.
 <br>In this case 1073741824 is a really big number,and we only prepare 2 int to accommodate it.
-<br>So if the argument goes beyond 2, the number will wash out the double 3.14.
-<br>And when the argument goes bigger,it will wash out our return address then the program will commit alarm.
-<br>And some time when we enter 1 there's nothing wrong that is because the compiler always make the space a little larger then our 
+<br>So if the number of the arguments goes beyond 2, the extra number will wash out the double 3.14.
+<br>And when enter more arguments,it will wash out our return address then the program will commit alarm.(Since our computer will place a canary to guard the security of our return address.
+<br>And sometimes when we enter 1 there's nothing wrong that is because the compiler always make the space a little larger then our 
 declaration for prepration in case.
+<br>This also tells us that our stack doesn't have the ability to tell wheter the array is illegal.
 ```cpp
 #include <stdio.h>
 #include <stdlib.h>
