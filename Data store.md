@@ -1,8 +1,9 @@
 Different data in different area 
 ----
-function of malloc and free is stored in the heap.
-<br>arguments and local variable is in the stack.
+function of malloc and free is stored in the heap.Heap is a dynamic space,which grows from two directions.
+<br>arguments and local variable is in the stack.Stack is an area grows from upper to lower.
 <br>global and static is in the data area where is far below the stack and heap.
+![store](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/Storage(cr.CMU).png)
 ```cpp
 #include <stdlib.h>
 #include <stdio.h>
