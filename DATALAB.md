@@ -105,12 +105,13 @@ int conditional(int x, int y, int z)
 <br> Rating: 3
 <br>`Analyze:`
 <br>`2 conditions: x and y are both positive or negative.or not.`<br>`case 1: compare x-y<=0 => x+~y<0    case 2:see whether x is positive or not `
+<br>`PS:After check,I changed sign_x equation because x is int so without !! we can't get 1 (we will end at 0xffffffff)`
 ```cpp
 int isLessOrEqual(int x, int y) {
-    int sign_x=x>>31;
-    int sign_y=y>>31;
-    int equal =!(sign_x^sign_y)&((~y+x)>>31);
-    int notequal=sign_x^!sign_y;
+    int sign_x=!!(x>>31);
+    int sign_y=!!(y>>31);
+    int equal =((!(sign_x^sign_y))&!!((x+~y)>>31));
+    int notequal=sign_x&!sign_y;
     return equal|notequal;
 }
 ```
@@ -153,7 +154,7 @@ int howManyBits(int x) {
     op=op>>shift8;
     shift4=(!!(op>>4))<<2;
     op=op>>shift4;
-    shift4=(!!(op>>2))<<1;
+    shift2=(!!(op>>2))<<1;
     op=op>>shift2;
     shift1=!!(op>>1);
     op=op>>shift1;
@@ -173,7 +174,7 @@ int howManyBits(int x) {
  ```cpp
 unsigned floatScale2(unsigned uf) {
     unsigned sign =(uf&0x80000000);
-    unsigned exp=(uf&0x7f800000);
+    unsigned exp=(uf&0x7f800000)>>23;
     unsigned frac=(uf<<9)>>9;
     if(!exp)
     {
