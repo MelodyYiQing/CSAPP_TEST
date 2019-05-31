@@ -55,7 +55,7 @@ int isTmax(int x)
 int allOddBits(int x) 
 {
     int a=85;
-    int b=a+(a<<8)+(a<<16)+a(<<24);
+    int b=a+(a<<8)+(a<<16)+(a<<24);
   return !~(x|b);
 }
 ```
@@ -82,7 +82,7 @@ int negate(int x) {
 ```cpp
 int isAsciiDigit(int x) 
 {
-  return (!((x+~48+1)>>31)&!!((x+~58+1)>>31);
+  return (!((x+~48+1)>>31)&!!((x+~58+1)>>31));
 }
 ```
 * conditional - same as x ? y : z
@@ -112,6 +112,7 @@ int isLessOrEqual(int x, int y) {
     int equal =!(sign_x^sign_y)&((~y+x)>>31);
     int notequal=sign_x^!sign_y;
     return equal|notequal;
+}
 ```
 * logicalNeg - implement the ! operator, using all of
              the legal operators except !
