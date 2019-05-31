@@ -30,7 +30,7 @@ Then we use `objdump-d bomb > bomb.txt`to see the disassembled code.
   400ef7:	48 83 c4 08          	add    $0x8,%rsp
   400efb:	c3                   	retq   
 ```
-we can see in 0x402400,store the second argument which are supposed to the answer.
+we can see in 0x402400,store the second argument which are supposed to be the answer.
 <br>we first set the breakpoint at phase_1 and explode_bomb then run the program.When asked enter a string ,enter sth casually(I just input my english name.hh)
 ![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/Bomb1.png)
 <br>Then we stop at the breakpoint of phase_1,the use disas to disassemble it and it can be seen same with our objdump file.Use the print and x can see what we put in.
@@ -149,7 +149,7 @@ End of assembler dump.
 <br>And quit from func4,the following compare ensures the second input must be 0;
 <br>Try the answer and as expected it is right.
 
-![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb14.png)
+![bomb](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/bomb13.png)
 
 * Phase 5
 <br>As always disassemble first.
