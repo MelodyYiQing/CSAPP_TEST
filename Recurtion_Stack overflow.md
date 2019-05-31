@@ -21,7 +21,7 @@ Recursion is Not always preferable
 #include <stdlib.h>
 
 int recurse(int x) {
-    int a[1<<15];  /* 4 * 2^15 =  64 KiB */
+    int a[1<<15];  /* 4 * 2^15 =  128 KiB */
     printf("x = %d.  a at %p\n", x, a); 
     a[0] = (1<<14)-1; //2^14 - 1< 2^15 no problem/
     a[a[0]] = x-1;
