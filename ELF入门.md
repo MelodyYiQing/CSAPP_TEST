@@ -61,4 +61,14 @@ int sum(int *a, int n)
 <br>从中间可以看到main函数放在第一节对应.text,array放在第三节的.data中，而sum是一个未定义的符号
 <br>用objdump-d指令可以看到可以看到反汇编的结果（由于没有链接，所以跳转到sum的时候是没有准确的地址的）
 <br>![](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/objdumpmain.o.png)
-<br>那么如果
+<br>那么如果我们只想gcc -o prog main.o sum.o后用readelf来观察prog的elf呢
+<br>![](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/执行视图readelf-h.png)
+<br>我们可以看到类型就变成了DYN共享目录文件，同时入口点地址更新，程序头的起点，大小，表项个数都改变了，因为程序需要放到寄存器中去运行了
+<br>elf的执行视图区别于链接视图的一点在于它还包含程序头表，用于说明可执行文件中的节与虚拟空间中的存储段间的映射关系
+<br>我们可以使用readelf -l 指令来读它的程序头表
+<br>![](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/readelf-l1.png)
+<br>![](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/readelf-l2.png)
+<br>我们可以看到PHDR的起始位置是40正好应证了我们之前看到的elf头的大小为64B，所以程序头表是紧接在程序头后的。
+<br>然后可以看到PHDR的FileSiz是1f8，对应的是上面读elf头的时候的56* 9B.
+<br>LOAD表示的是可装入段，第一个LOAD是可读不可写，可执行的代码段，可以猜出是只读代码段。说明了第0x0000000000000000到0x000000000000080f（包括ELF头、程序头表、.init、.text和.rodata节）映射到虚拟地址0x0000000000000000开始长度为0x0000000000000810的区域，按照0x200000对齐，具有只读/执行权限。
+<br>第二个装入段可读可写，从0x0000000000000df0开始，长度为0x0000000000000228的.data节，映射到虚拟地址的0x0000000000200df0开始长度为0x0000000000000230字节的存储区域，前面的0x0000000000000228个字节用.data节内容初始化，后面剩余的字节对应.bss节初始化为0.
