@@ -18,7 +18,7 @@ ELF有两种视图，对应不同的目标文件
 <br>ELF头占52B=0x34B
 <br>最后一行指出第九项是字符串表
 * 用readelf -S命令来读节头表信息
-<br>![]((https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/readelf-S.png)
+<br>![struct](https://github.com/MelodyYiQing/CSAPP_TEST/blob/master/readelf-S.png)
 <br>首先会说明(这里)一共有12个节头信息，起始位置在114
 <br>然后可以看到描述了0-11总共12个节的情况，第0个节设为空。每一个表象就是40个字节的数据结构
 <br>数据结构
